@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% block title %}{{ query|default:"All Products" }} — DesiBazaar{% endblock %}
+{% block meta_desc %}Shop {{ total_count }}{% if selected_category %} {{ selected_category.name }}{% endif %} authentic Indian products{% if query %} matching "{{ query }}"{% endif %}. Direct from artisans, fast delivery.{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item active">Products
+        {% if selected_category %} / {{ selected_category.name }}{% endif %}
+      </li>
+    </ol>
+  </nav>
+
+  <div class="row g-4">
+    <!-- Sidebar Filters -->
+    <div class="col-lg-3">
+      <div class="sidebar-filter">
+        <h5 class="fw-bold mb-4" style="font-family:'Poppins',sans-serif;"><i class="bi bi-funnel-fill me-2 text-primary"></i>Filters</h5>
+
+        <!-- Search -->
+        <div class="filter-title">SEARCH</div>
+        <form method="GET" action="{% url 'product_list' %}" class="mb-4">
+          {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category.slug }}">{% endif %}
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" value="{{ query }}" placeholder="Search products...">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+
+        <!-- Categories -->
+        <div class="filter-title mb-2">CATEGORIES</div>
+        <div class="mb-4">
+          <a href="{% url 'product_list' %}" class="filter-category-btn {% if not selected_category %}active{% endif %}">
+            <i class="bi bi-grid-3x3-gap me-1"></i> All Products
+          </a>
+          {% for cat in categories %}
+          <a href="{% url 'product_list' %}?category={{ cat.slug }}{% if query %}&q={{ query }}{% endif %}"
+             class="filter-category-btn {% if selected_category.slug == cat.slug %}active{% endif %}">
+            {{ cat.name }}
+          </a>
+          {% endfor %}
+        </div>
+
+        <!-- Price Filter -->
+        <div class="filter-title mb-2">PRICE RANGE</div>
+        <form method="GET" action="{% url 'product_list' %}">
+          {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category.slug }}">{% endif %}
+          {% if query %}<input type="hidden" name="q" value="{{ query }}">{% endif %}
+          <input type="hidden" name="sort" value="{{ sort_by }}">
+          <div class="mb-2">
+            <label class="form-label small">Min Price (₹)</label>
+            <input type="number" name="min_price" class="form-control form-control-sm" value="{{ min_price }}" placeholder="0" min="0">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small">Max Price (₹)</label>
+            <input type="number" name="max_price" class="form-control form-control-sm" value="{{ max_price }}" placeholder="10000" min="0">
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm w-100">Apply Filter</button>
+        </form>
+
+        <!-- Rating Filter -->
+        <div class="filter-title mb-2 mt-4">RATING</div>
+        <div class="d-flex flex-wrap gap-2 mb-4">
+          <a href="{% url 'product_list' %}?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort=rating" class="rating-chip {% if sort_by == 'rating' %}active{% endif %}">
+            ⭐ 4+ Stars
+          </a>
+          <a href="{% url 'product_list' %}?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}sort=newest" class="rating-chip {% if sort_by == 'newest' %}active{% endif %}">
+            🆕 Newest
+          </a>
+        </div>
+
+        <!-- State filter -->
+        <div class="filter-title mb-2">STATE OF ORIGIN</div>
+        <div class="d-flex flex-wrap gap-1 mb-3">
+          <a href="{% url 'product_list' %}?q=Rajasthan{% if selected_category %}&category={{ selected_category.slug }}{% endif %}" class="state-pill {% if query == 'Rajasthan' %}active{% endif %}">Rajasthan</a>
+          <a href="{% url 'product_list' %}?q=Kerala{% if selected_category %}&category={{ selected_category.slug }}{% endif %}" class="state-pill {% if query == 'Kerala' %}active{% endif %}">Kerala</a>
+          <a href="{% url 'product_list' %}?q=Kashmir{% if selected_category %}&category={{ selected_category.slug }}{% endif %}" class="state-pill {% if query == 'Kashmir' %}active{% endif %}">Kashmir</a>
+          <a href="{% url 'product_list' %}?q=Gujarat{% if selected_category %}&category={{ selected_category.slug }}{% endif %}" class="state-pill {% if query == 'Gujarat' %}active{% endif %}">Gujarat</a>
+          <a href="{% url 'product_list' %}?q=Punjab{% if selected_category %}&category={{ selected_category.slug }}{% endif %}" class="state-pill {% if query == 'Punjab' %}active{% endif %}">Punjab</a>
+          <a href="{% url 'product_list' %}?q=Bengal{% if selected_category %}&category={{ selected_category.slug }}{% endif %}" class="state-pill {% if query == 'Bengal' %}active{% endif %}">Bengal</a>
+          <a href="{% url 'product_list' %}?q=Maharashtra{% if selected_category %}&category={{ selected_category.slug }}{% endif %}" class="state-pill {% if query == 'Maharashtra' %}active{% endif %}">Maharashtra</a>
+          <a href="{% url 'product_list' %}?q=Karnataka{% if selected_category %}&category={{ selected_category.slug }}{% endif %}" class="state-pill {% if query == 'Karnataka' %}active{% endif %}">Karnataka</a>
+          <a href="{% url 'product_list' %}?q=Tamil Nadu{% if selected_category %}&category={{ selected_category.slug }}{% endif %}" class="state-pill {% if query == 'Tamil Nadu' %}active{% endif %}">Tamil Nadu</a>
+          <a href="{% url 'product_list' %}?q=Assam{% if selected_category %}&category={{ selected_category.slug }}{% endif %}" class="state-pill {% if query == 'Assam' %}active{% endif %}">Assam</a>
+        </div>
+
+        {% if query or min_price or max_price or selected_category %}
+        <div class="mt-3">
+          <a href="{% url 'product_list' %}" class="btn btn-outline-secondary btn-sm w-100">
+            <i class="bi bi-x-circle me-1"></i>Clear All Filters
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="col-lg-9">
+      <!-- Top bar -->
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+        <div>
+          <h4 class="fw-bold mb-0" style="font-family:'Poppins',sans-serif;">
+            {% if selected_category %}{{ selected_category.name }}
+            {% elif query %}Results for "{{ query }}"
+            {% else %}All Products{% endif %}
+          </h4>
+          <small class="text-muted">{{ total_count }} product{{ total_count|pluralize }} found</small>
+        </div>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <!-- View toggle -->
+          <div class="d-flex gap-1" role="group" aria-label="View toggle">
+            <button class="view-toggle-btn active" id="gridViewBtn" title="Grid View" onclick="setView('grid')">
+              <i class="bi bi-grid-3x3-gap-fill"></i>
+            </button>
+            <button class="view-toggle-btn" id="listViewBtn" title="List View" onclick="setView('list')">
+              <i class="bi bi-list-ul"></i>
+            </button>
+          </div>
+          <!-- Sort -->
+          <form method="GET" class="d-flex align-items-center gap-2">
+            {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category.slug }}">{% endif %}
+            {% if query %}<input type="hidden" name="q" value="{{ query }}">{% endif %}
+            {% if min_price %}<input type="hidden" name="min_price" value="{{ min_price }}">{% endif %}
+            {% if max_price %}<input type="hidden" name="max_price" value="{{ max_price }}">{% endif %}
+            <select name="sort" class="form-select form-select-sm" style="width:auto;" onchange="this.form.submit()">
+              <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Newest First</option>
+              <option value="price_low" {% if sort_by == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+              <option value="price_high" {% if sort_by == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+              <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Top Rated</option>
+              <option value="name" {% if sort_by == 'name' %}selected{% endif %}>A to Z</option>
+            </select>
+          </form>
+        </div>
+      </div>
+
+      {% if products %}
+      <div class="row g-4" id="productsGrid">
+        {% for product in products %}
+        <div class="col-6 col-md-4 col-xl-4 fade-up">
+          {% include 'store/includes/product_card.html' with product=product %}
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% if products.has_other_pages %}
+      <nav class="mt-5 d-flex justify-content-center" aria-label="Products pagination">
+        <ul class="pagination align-items-center gap-1">
+          {% if products.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}{% if query %}q={{ query }}&{% endif %}page={{ products.previous_page_number }}&sort={{ sort_by }}">
+              <i class="bi bi-chevron-left"></i>
+            </a>
+          </li>
+          {% endif %}
+          {% for num in products.paginator.page_range %}
+          <li class="page-item {% if products.number == num %}active{% endif %}">
+            <a class="page-link" href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}{% if query %}q={{ query }}&{% endif %}page={{ num }}&sort={{ sort_by }}">{{ num }}</a>
+          </li>
+          {% endfor %}
+          {% if products.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?{% if selected_category %}category={{ selected_category.slug }}&{% endif %}{% if query %}q={{ query }}&{% endif %}page={{ products.next_page_number }}&sort={{ sort_by }}">
+              <i class="bi bi-chevron-right"></i>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-state-icon"><i class="bi bi-search text-muted" style="font-size:4rem;"></i></div>
+        <div class="empty-state-title">No products found</div>
+        <div class="empty-state-desc">Try different search terms, clear filters, or browse all categories.</div>
+        <div class="d-flex gap-3 justify-content-center flex-wrap mt-3">
+          <a href="{% url 'product_list' %}" class="btn-primary-custom">Browse All Products</a>
+          {% if query %}
+          <a href="{% url 'search_results' %}?q={{ query }}" class="btn-outline-custom">Search Everywhere</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Grid / List view toggle
+function setView(mode) {
+  const grid = document.getElementById('productsGrid');
+  const gridBtn = document.getElementById('gridViewBtn');
+  const listBtn = document.getElementById('listViewBtn');
+  if (!grid) return;
+  if (mode === 'list') {
+    grid.classList.add('product-list-view');
+    gridBtn.classList.remove('active');
+    listBtn.classList.add('active');
+    localStorage.setItem('db-product-view', 'list');
+  } else {
+    grid.classList.remove('product-list-view');
+    gridBtn.classList.add('active');
+    listBtn.classList.remove('active');
+    localStorage.setItem('db-product-view', 'grid');
+  }
+}
+// Restore saved view preference
+const savedView = localStorage.getItem('db-product-view');
+if (savedView === 'list') setView('list');
+</script>
+{% endblock %}

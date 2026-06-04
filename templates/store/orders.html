@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}My Orders — DesiBazaar{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h2 class="fw-bold mb-4" style="font-family:'Poppins',sans-serif;"><i class="bi bi-bag-check me-2 text-primary"></i>My Orders</h2>
+  {% if orders %}
+  {% for order in orders %}
+  <div class="p-4 rounded-xl mb-4 shadow-sm" style="background:var(--card-bg);border:1px solid rgba(255,107,53,0.1);">
+    <div class="d-flex align-items-start justify-content-between flex-wrap gap-3 mb-3">
+      <div>
+        <div class="fw-bold" style="font-family:'Poppins',sans-serif;font-size:1.05rem;">Order #{{ order.order_number }}</div>
+        <div class="text-muted small">{{ order.created_at|date:"d F Y, g:i A" }}</div>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
+        <span class="fw-bold text-primary fs-5">₹{{ order.total_amount }}</span>
+      </div>
+    </div>
+    <!-- Items Preview -->
+    <div class="d-flex gap-2 flex-wrap mb-3">
+      {% for item in order.items.all|slice:":4" %}
+      <div class="d-flex align-items-center gap-2 p-2 rounded-xl" style="background:rgba(255,107,53,0.04);border:1px solid rgba(255,107,53,0.1);">
+        {% if item.product_image %}
+        <img src="{{ item.product_image }}" alt="{{ item.product_name }}" style="width:40px;height:40px;object-fit:cover;border-radius:8px;">
+        {% endif %}
+        <div>
+          <div style="font-size:0.8rem;font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ item.product_name }}</div>
+          <div class="text-muted" style="font-size:0.72rem;">x{{ item.quantity }}</div>
+        </div>
+      </div>
+      {% endfor %}
+      {% if order.items.count > 4 %}
+      <div class="d-flex align-items-center text-muted small">+{{ order.items.count|add:"-4" }} more</div>
+      {% endif %}
+    </div>
+    <div class="d-flex gap-3">
+      <a href="{% url 'order_detail' order.order_number %}" class="btn btn-primary btn-sm">
+        View Details <i class="bi bi-arrow-right ms-1"></i>
+      </a>
+      <span class="badge bg-light text-dark border align-self-center">{{ order.get_payment_method_display }}</span>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon"><i class="bi bi-box-seam text-muted" style="font-size:4rem;"></i></div>
+    <div class="empty-state-title">No orders yet!</div>
+    <div class="empty-state-desc">You haven't placed any orders. Start shopping to see your orders here.</div>
+    <a href="{% url 'product_list' %}" class="btn-primary-custom">Start Shopping</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

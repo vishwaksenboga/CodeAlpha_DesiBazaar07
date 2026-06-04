@@ -1,0 +1,376 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{% block meta_desc %}DesiBazaar — Authentic Indian Products From Every Corner of India. Shop traditional foods, handicrafts, organic products, textiles and more.{% endblock %}">
+  <title>{% block title %}DesiBazaar — Authentic Indian Products{% endblock %}</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF6B35'><path d='M16 6V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H3v14c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2V6h-5zM10 4h4v2h-4V4zm9 16H5V8h14v12z'/></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=1.1">
+
+  <!-- PWA -->
+  <link rel="manifest" href="{% static 'manifest.json' %}">
+  <meta name="theme-color" content="#FF6B35">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="DesiBazaar">
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ══════════════ ANNOUNCEMENT BAR ══════════════ -->
+<div id="announcementBar" style="background:linear-gradient(90deg,#2E7D32,#4CAF50,#FF6B35);color:white;text-align:center;padding:0.5rem 1rem;font-size:0.82rem;font-family:'Poppins',sans-serif;font-weight:600;position:relative;z-index:1050;">
+  <span id="announcementText"></span>
+  <button onclick="document.getElementById('announcementBar').style.display='none'" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;color:white;font-size:1rem;cursor:pointer;opacity:0.7;">✕</button>
+</div>
+
+<!-- ══════════════ NAVBAR ══════════════ -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <!-- Brand -->
+    <a class="navbar-brand" href="{% url 'home' %}">
+      Desi<span>Bazaar</span>
+    </a>
+
+    <!-- Search (center) -->
+    <form class="navbar-search d-none d-md-flex mx-auto" action="{% url 'search_results' %}" method="GET" style="position:relative;">
+      <input class="form-control" type="search" name="q" id="searchInput" placeholder="Search products, categories, states..." value="{{ request.GET.q }}" autocomplete="off">
+      <button class="btn" type="submit"><i class="bi bi-search"></i></button>
+      <div id="searchDropdown"></div>
+    </form>
+
+    <!-- Right icons + hamburger -->
+    <div class="d-flex align-items-center gap-2">
+      <!-- Dark mode -->
+      <button id="darkModeToggle" class="dark-toggle" title="Toggle dark mode">
+        <i class="bi bi-moon-fill"></i>
+      </button>
+
+      <!-- Wishlist -->
+      {% if user.is_authenticated %}
+      <a href="{% url 'wishlist' %}" class="nav-icon-btn" title="Wishlist">
+        <i class="bi bi-heart"></i>
+        <span class="nav-badge wishlist-badge {% if not wishlist_count %}d-none{% endif %}">{{ wishlist_count|default_if_none:0 }}</span>
+      </a>
+      <!-- Cart -->
+      <a href="{% url 'cart' %}" class="nav-icon-btn" title="Cart">
+        <i class="bi bi-bag"></i>
+        <span class="nav-badge cart-badge {% if not cart_count %}d-none{% endif %}">{{ cart_count|default_if_none:0 }}</span>
+      </a>
+      {% endif %}
+
+      <!-- Hamburger -->
+      <button class="navbar-toggler border-0 ms-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+
+    <!-- Nav Links -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Products</a>
+          <ul class="dropdown-menu border-0 shadow" style="border-radius:var(--radius-sm);min-width:220px;">
+            <li><a class="dropdown-item" href="{% url 'product_list' %}"><i class="bi bi-grid me-2 text-primary"></i>All Products</a></li>
+            <li><hr class="dropdown-divider"></li>
+            {% for cat in categories|slice:":8" %}
+            <li><a class="dropdown-item" href="{% url 'product_list' %}?category={{ cat.slug }}">{{ cat.name }}</a></li>
+            {% endfor %}
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-primary fw-bold" href="{% url 'product_list' %}">View All Categories →</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'deals' %}" style="color:var(--primary) !important;font-weight:700;">
+            Deals
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'artisan_stories' %}">
+            Artisans
+          </a>
+        </li>
+
+        <!-- Mobile search -->
+        <li class="nav-item d-md-none">
+          <form action="{% url 'search_results' %}" method="GET" class="d-flex mt-2">
+            <input class="form-control" type="search" name="q" placeholder="Search...">
+            <button class="btn btn-primary ms-2" type="submit"><i class="bi bi-search"></i></button>
+          </form>
+        </li>
+
+        {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" data-bs-toggle="dropdown">
+            <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF6B35,#FFC107);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:0.85rem;">
+              {{ user.first_name|first|upper|default:user.username|first|upper }}
+            </div>
+            <span>{{ user.first_name|default:user.username }}</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end border-0 shadow" style="border-radius:var(--radius-sm);">
+            <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="bi bi-person me-2"></i>My Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'my_orders' %}"><i class="bi bi-bag-check me-2"></i>My Orders</a></li>
+            <li><a class="dropdown-item" href="{% url 'wishlist' %}"><i class="bi bi-heart me-2"></i>Wishlist</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+                <button type="submit" class="dropdown-item text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
+              </form>
+            </li>
+          </ul>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}">Login</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'register' %}" class="btn btn-primary-custom ms-1">Sign Up</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- CSRF token for AJAX -->
+{% csrf_token %}
+
+<!-- ══════════════ MESSAGES ══════════════ -->
+<div class="messages-container">
+  {% for message in messages %}
+  <div class="alert alert-toast d-flex align-items-center gap-2 mb-2
+    {% if message.tags == 'error' %}alert-danger
+    {% elif message.tags == 'warning' %}alert-warning
+    {% elif message.tags == 'success' %}alert-success
+    {% else %}alert-info{% endif %}">
+    <i class="bi {% if message.tags == 'success' %}bi-check-circle-fill text-success
+      {% elif message.tags == 'error' %}bi-x-circle-fill text-danger
+      {% elif message.tags == 'warning' %}bi-exclamation-circle-fill text-warning
+      {% else %}bi-info-circle-fill text-info{% endif %}"></i>
+    <span>{{ message }}</span>
+    <button type="button" class="btn-close btn-close-sm ms-auto" onclick="this.parentElement.remove()"></button>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- ══════════════ MAIN CONTENT ══════════════ -->
+{% block content %}{% endblock %}
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Brand -->
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-brand">DesiBazaar</div>
+        <div class="footer-tagline">Authentic Indian Products From Every Corner of India</div>
+        <p class="footer-desc">We connect rural artisans, organic farmers, and regional producers directly to consumers across India and the world. Every purchase supports a local livelihood.</p>
+        <div class="footer-social mt-3">
+          <a href="#" title="Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" title="Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" title="Twitter"><i class="bi bi-twitter-x"></i></a>
+          <a href="#" title="YouTube"><i class="bi bi-youtube"></i></a>
+          <a href="#" title="Pinterest"><i class="bi bi-pinterest"></i></a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-lg-2 col-md-3 col-6">
+        <div class="footer-heading">Quick Links</div>
+        <a href="{% url 'home' %}" class="footer-link">Home</a>
+        <a href="{% url 'product_list' %}" class="footer-link">All Products</a>
+        <a href="{% url 'about' %}" class="footer-link">About Us</a>
+        <a href="{% url 'contact' %}" class="footer-link">Contact</a>
+        <a href="{% url 'faq' %}" class="footer-link">FAQ</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'my_orders' %}" class="footer-link">My Orders</a>
+        {% else %}
+        <a href="{% url 'register' %}" class="footer-link">Create Account</a>
+        {% endif %}
+      </div>
+
+      <!-- Categories -->
+      <div class="col-lg-2 col-md-3 col-6">
+        <div class="footer-heading">Categories</div>
+        {% for cat in categories|slice:":7" %}
+        <a href="{% url 'product_list' %}?category={{ cat.slug }}" class="footer-link">{{ cat.name }}</a>
+        {% endfor %}
+      </div>
+
+      <!-- Policies -->
+      <div class="col-lg-2 col-md-6 col-6">
+        <div class="footer-heading">Policies</div>
+        <a href="{% url 'privacy' %}" class="footer-link">Privacy Policy</a>
+        <a href="{% url 'terms' %}" class="footer-link">Terms & Conditions</a>
+        <a href="{% url 'returns' %}" class="footer-link">Returns & Refunds</a>
+        <a href="{% url 'faq' %}" class="footer-link">Help Center</a>
+      </div>
+
+      <!-- Contact -->
+      <div class="col-lg-2 col-md-6 col-6">
+        <div class="footer-heading">Contact</div>
+        <a href="mailto:hello@desibazaar.in" class="footer-link"><i class="bi bi-envelope me-1"></i> hello@desibazaar.in</a>
+        <a href="tel:+911800123456" class="footer-link"><i class="bi bi-telephone me-1"></i> 1800-123-4567</a>
+        <div class="footer-link" style="cursor:default;"><i class="bi bi-geo-alt me-1"></i> Mumbai, Maharashtra</div>
+        <div class="mt-3">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/OreillySafari.jpg/160px-OreillySafari.jpg" alt="Secure" style="display:none;">
+          <div style="font-size:0.75rem; color:#666; margin-top:0.5rem;">
+            100% Secure Payments<br>
+            Authenticity Verified<br>
+            Pan-India Shipping
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <span>© 2024 DesiBazaar. All rights reserved. Made with pride in India</span>
+        <div class="d-flex gap-3">
+          <a href="{% url 'privacy' %}">Privacy</a>
+          <a href="{% url 'terms' %}">Terms</a>
+          <a href="{% url 'returns' %}">Returns</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Back to Top -->
+<button id="backToTop" title="Back to top"><i class="bi bi-arrow-up"></i></button>
+
+<!-- Compare floating bar -->
+<div id="compareBar" style="display:none;">
+  <i class="bi bi-bar-chart-line me-1"></i>
+  <span id="compareCount">0</span> product(s) selected
+  <a href="{% url 'compare_products' %}"><i class="bi bi-eye me-1"></i>Compare Now</a>
+</div>
+
+<!-- ══════════════ BOTTOM MOBILE NAV ══════════════ -->
+<nav class="bottom-nav" id="bottomNav">
+  <a href="{% url 'home' %}" class="bottom-nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}" id="bn-home">
+    <i class="bi bi-house{% if request.resolver_match.url_name == 'home' %}-fill{% endif %}"></i>
+    Home
+  </a>
+  <a href="{% url 'product_list' %}" class="bottom-nav-item {% if request.resolver_match.url_name == 'product_list' %}active{% endif %}">
+    <i class="bi bi-grid{% if request.resolver_match.url_name == 'product_list' %}-fill{% endif %}"></i>
+    Products
+  </a>
+  {% if user.is_authenticated %}
+  <a href="{% url 'cart' %}" class="bottom-nav-item {% if request.resolver_match.url_name == 'cart' %}active{% endif %}">
+    <i class="bi bi-bag{% if request.resolver_match.url_name == 'cart' %}-fill{% endif %}"></i>
+    {% if cart_count and cart_count > 0 %}<span class="bn-badge">{{ cart_count }}</span>{% endif %}
+    Cart
+  </a>
+  <a href="{% url 'wishlist' %}" class="bottom-nav-item {% if request.resolver_match.url_name == 'wishlist' %}active{% endif %}">
+    <i class="bi bi-heart{% if request.resolver_match.url_name == 'wishlist' %}-fill{% endif %}"></i>
+    Wishlist
+  </a>
+  <a href="{% url 'profile' %}" class="bottom-nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+    <i class="bi bi-person{% if request.resolver_match.url_name == 'profile' %}-fill{% endif %}"></i>
+    Profile
+  </a>
+  {% else %}
+  <a href="{% url 'deals' %}" class="bottom-nav-item {% if request.resolver_match.url_name == 'deals' %}active{% endif %}">
+    <i class="bi bi-tag{% if request.resolver_match.url_name == 'deals' %}-fill{% endif %}"></i>
+    Deals
+  </a>
+  <a href="{% url 'login' %}" class="bottom-nav-item">
+    <i class="bi bi-person"></i>
+    Login
+  </a>
+  {% endif %}
+</nav>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom JS -->
+<script src="{% static 'js/main.js' %}"></script>
+
+<!-- PWA Service Worker -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/static/sw.js').catch(() => {});
+  });
+}
+// Install prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.getElementById('pwaInstallBtn');
+  if (btn) btn.style.display = 'flex';
+});
+function installPWA() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      const btn = document.getElementById('pwaInstallBtn');
+      if (btn) btn.style.display = 'none';
+    });
+  }
+}
+
+// Announcement bar rotation
+const announcements = [
+  '🚚 Free shipping on orders above ₹599! Use code FREESHIP',
+  '🌿 100% Organic & Authentic Indian Products',
+  '🎁 Use WELCOME10 for 10% off your first order!',
+  '🤝 Supporting 500+ Indian artisans and farmers directly',
+  '📦 Pan-India delivery in 3-7 business days',
+  '🎉 New Festival Specials added every week!',
+];
+let annIdx = 0;
+const annEl = document.getElementById('announcementText');
+if (annEl) {
+  annEl.textContent = announcements[annIdx];
+  setInterval(() => {
+    annIdx = (annIdx + 1) % announcements.length;
+    annEl.style.opacity = '0';
+    setTimeout(() => {
+      annEl.textContent = announcements[annIdx];
+      annEl.style.opacity = '1';
+    }, 400);
+  }, 4000);
+}
+
+// Cart badge bounce animation on add
+document.addEventListener('cartUpdated', () => {
+  document.querySelectorAll('.cart-badge').forEach(el => {
+    el.classList.remove('bounce');
+    void el.offsetWidth; // reflow
+    el.classList.add('bounce');
+    setTimeout(() => el.classList.remove('bounce'), 600);
+  });
+});
+</script>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

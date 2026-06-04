@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block title %}Compare Products — DesiBazaar{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+    <div>
+      <h2 class="fw-bold mb-0" style="font-family:'Poppins',sans-serif;"><i class="bi bi-bar-chart-line me-2 text-primary"></i>Compare Products</h2>
+      <p class="text-muted small">Compare up to 3 products side by side</p>
+    </div>
+    <a href="{% url 'product_list' %}" class="btn-outline-custom">
+      <i class="bi bi-plus me-1"></i>Add More Products
+    </a>
+  </div>
+
+  {% if products %}
+  <div class="table-responsive">
+    <table class="table table-bordered rounded-xl overflow-hidden" style="background:var(--card-bg);vertical-align:middle;">
+      <thead>
+        <tr style="background:linear-gradient(135deg,#FF6B35,#FF8A5C);color:white;">
+          <th style="width:200px;padding:1rem;">Feature</th>
+          {% for p in products %}
+          <th style="padding:1rem;text-align:center;">{{ p.name }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Image row -->
+        <tr>
+          <td class="fw-bold text-muted small">Product</td>
+          {% for p in products %}
+          <td class="text-center p-3">
+            <a href="{% url 'product_detail' p.slug %}">
+              <img src="{{ p.image_url }}" alt="{{ p.name }}" style="width:120px;height:120px;object-fit:cover;border-radius:12px;" loading="lazy">
+            </a>
+            <div class="mt-2">
+              <a href="{% url 'product_detail' p.slug %}" class="text-decoration-none fw-bold" style="font-size:0.88rem;font-family:'Poppins',sans-serif;">{{ p.name }}</a>
+            </div>
+          </td>
+          {% endfor %}
+        </tr>
+        <!-- Price -->
+        <tr>
+          <td class="fw-bold text-muted small">Price</td>
+          {% for p in products %}
+          <td class="text-center fw-bold text-primary fs-5">₹{{ p.effective_price }}
+            {% if p.discount_price %}<div class="text-muted text-decoration-line-through fs-6">₹{{ p.price }}</div>{% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        <!-- Discount -->
+        <tr>
+          <td class="fw-bold text-muted small">Discount</td>
+          {% for p in products %}
+          <td class="text-center">
+            {% if p.discount_percentage %}<span class="badge bg-danger">{{ p.discount_percentage }}% OFF</span>
+            {% else %}<span class="text-muted">—</span>{% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        <!-- Rating -->
+        <tr>
+          <td class="fw-bold text-muted small">Rating</td>
+          {% for p in products %}
+          <td class="text-center">
+            <span style="color:#FFC107;font-size:1rem;">★</span>
+            <span class="fw-bold">{{ p.rating }}</span>
+            <span class="text-muted small">({{ p.review_count }})</span>
+          </td>
+          {% endfor %}
+        </tr>
+        <!-- Category -->
+        <tr>
+          <td class="fw-bold text-muted small">Category</td>
+          {% for p in products %}
+          <td class="text-center"><span class="section-badge" style="font-size:0.75rem;">{{ p.category.name }}</span></td>
+          {% endfor %}
+        </tr>
+        <!-- Origin -->
+        <tr>
+          <td class="fw-bold text-muted small">Origin</td>
+          {% for p in products %}
+          <td class="text-center"><i class="bi bi-geo-alt-fill text-primary"></i> {{ p.state_origin }}</td>
+          {% endfor %}
+        </tr>
+        <!-- Availability -->
+        <tr>
+          <td class="fw-bold text-muted small">Availability</td>
+          {% for p in products %}
+          <td class="text-center">
+            {% if p.in_stock %}<span class="badge bg-success"><i class="bi bi-check me-1"></i>In Stock</span>
+            {% else %}<span class="badge bg-danger">Out of Stock</span>{% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        <!-- Action -->
+        <tr>
+          <td class="fw-bold text-muted small">Action</td>
+          {% for p in products %}
+          <td class="text-center p-3">
+            <div class="d-flex flex-column gap-2 align-items-center">
+              {% if p.in_stock and user.is_authenticated %}
+              <form method="POST" action="{% url 'add_to_cart' p.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-sm rounded-pill px-3">
+                  <i class="bi bi-bag-plus me-1"></i>Add to Cart
+                </button>
+              </form>
+              {% endif %}
+              <a href="{% url 'product_detail' p.slug %}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">View Details</a>
+            </div>
+          </td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="text-center mt-4">
+    <button class="btn btn-outline-danger rounded-pill" onclick="clearCompare()">
+      <i class="bi bi-x-circle me-1"></i>Clear Compare List
+    </button>
+  </div>
+
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon"><i class="bi bi-bar-chart-fill text-muted" style="font-size:4rem;"></i></div>
+    <div class="empty-state-title">No products to compare</div>
+    <div class="empty-state-desc">Click the compare button on any product to add it here. Compare up to 3 products.</div>
+    <a href="{% url 'product_list' %}" class="btn-primary-custom">Browse Products</a>
+  </div>
+  {% endif %}
+</div>
+
+{% block extra_js %}
+<script>
+function clearCompare() {
+  fetch('/api/compare/0/', {
+    method: 'GET',
+  }).then(() => {
+    // Reset session - just redirect home since we can't clear without a dedicated endpoint
+    window.location.href = '{% url "product_list" %}';
+  });
+}
+</script>
+{% endblock %}
+{% endblock %}

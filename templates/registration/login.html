@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Login — DesiBazaar{% endblock %}
+{% block content %}
+<div class="py-5" style="background:linear-gradient(135deg,rgba(255,107,53,0.05) 0%,rgba(46,125,50,0.05) 100%);min-height:80vh;display:flex;align-items:center;">
+  <div class="container">
+    <div class="auth-card">
+      <div class="auth-logo">DesiBazaar</div>
+      <h2 class="auth-title">Welcome Back!</h2>
+      <p class="auth-subtitle">Sign in to your account to continue shopping</p>
+
+      <form method="POST" novalidate>
+        {% csrf_token %}
+        {% if form.errors %}
+        <div class="alert alert-danger rounded-xl mb-3" style="font-size:0.88rem;">
+          <i class="bi bi-exclamation-circle me-2"></i>Invalid username or password. Please try again.
+        </div>
+        {% endif %}
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
+            <input type="text" name="username" class="form-control" placeholder="Enter your username" autofocus required>
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Password</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+            <button class="btn btn-outline-secondary" type="button" onclick="togglePwd(this)"><i class="bi bi-eye"></i></button>
+          </div>
+        </div>
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+        <button type="submit" class="btn-primary-custom w-100" style="border:none;padding:0.85rem;font-size:1rem;">
+          <i class="bi bi-box-arrow-in-right me-2"></i>Login
+        </button>
+      </form>
+
+      <hr class="divider">
+      <p class="text-center text-muted" style="font-size:0.88rem;">
+        New to DesiBazaar? <a href="{% url 'register' %}" class="text-primary fw-bold">Create an account</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% block extra_js %}
+<script>
+function togglePwd(btn) {
+  const input = btn.previousElementSibling;
+  const icon = btn.querySelector('i');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.replace('bi-eye', 'bi-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.replace('bi-eye-slash', 'bi-eye');
+  }
+}
+</script>
+{% endblock %}
+{% endblock %}

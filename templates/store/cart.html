@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% block title %}My Cart — DesiBazaar{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item active">My Cart</li>
+    </ol>
+  </nav>
+  <h2 class="fw-bold mb-4" style="font-family:'Poppins',sans-serif;">
+    <i class="bi bi-bag me-2 text-primary"></i>My Cart
+    <span class="badge ms-2" style="background:rgba(255,107,53,0.1);color:var(--primary);font-size:1rem;">{{ cart.item_count }} items</span>
+  </h2>
+
+  {% if items %}
+  <div class="row g-4">
+    <!-- Cart Items -->
+    <div class="col-lg-8">
+      {% for item in items %}
+      <div class="cart-item-card fade-up" id="cart-row-{{ item.id }}">
+        <div class="d-flex gap-3 align-items-start">
+          <a href="{% url 'product_detail' item.product.slug %}" style="flex-shrink:0;">
+            <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="cart-item-img"
+                 style="transition:transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          </a>
+          <div class="flex-grow-1">
+            <a href="{% url 'product_detail' item.product.slug %}" class="text-decoration-none">
+              <div class="cart-item-name text-dark">{{ item.product.name }}</div>
+            </a>
+            <div class="d-flex flex-wrap gap-2 mt-1 mb-2">
+              <span class="text-muted small"><i class="bi bi-geo-alt text-primary"></i> {{ item.product.state_origin }}</span>
+              <span class="text-muted small">|</span>
+              <span class="organic-badge small"><i class="bi bi-patch-check"></i> Verified Authentic</span>
+              {% if item.product.discount_price %}
+              <span class="badge" style="background:rgba(229,57,53,0.1);color:#e53935;font-size:0.72rem;">-{{ item.product.discount_percentage }}% OFF</span>
+              {% endif %}
+            </div>
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-2">
+              <!-- Qty Controls -->
+              <div class="qty-control">
+                <button class="qty-btn" onclick="changeQty({{ item.id }}, {{ item.quantity|add:'-1' }})" {% if item.quantity <= 1 %}style="opacity:0.5;"{% endif %}>−</button>
+                <input type="number" class="qty-input" id="qty-{{ item.id }}" value="{{ item.quantity }}" min="1" max="10"
+                       onchange="changeQty({{ item.id }}, this.value)">
+                <button class="qty-btn" onclick="changeQty({{ item.id }}, {{ item.quantity|add:'1' }})" {% if item.quantity >= 10 %}style="opacity:0.5;"{% endif %}>+</button>
+              </div>
+              <div>
+                <span class="fw-bold text-primary fs-5" id="subtotal-{{ item.id }}">₹{{ item.subtotal }}</span>
+                {% if item.product.discount_price %}
+                <span class="text-muted text-decoration-line-through ms-2 small">₹{{ item.product.price }}</span>
+                {% endif %}
+              </div>
+              <!-- Remove -->
+              <form method="POST" action="{% url 'remove_from_cart' item.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill cart-remove-btn">
+                  <i class="bi bi-trash me-1"></i>Remove
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      <!-- Coupon Code Section -->
+      <div class="coupon-section mt-4">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <i class="bi bi-ticket-perforated text-primary fs-5"></i>
+          <span class="fw-bold" style="font-family:'Poppins',sans-serif;">Have a coupon code?</span>
+        </div>
+        <form id="couponForm">
+          {% csrf_token %}
+          <div class="input-group">
+            <input type="text" id="couponInput" class="form-control" placeholder="Enter coupon code (e.g. WELCOME10)" style="text-transform:uppercase;" maxlength="20">
+            <button type="submit" class="btn btn-primary" id="couponBtn">Apply</button>
+          </div>
+          <small id="couponMessage" class="mt-1"></small>
+          <div class="mt-2" style="font-size:0.78rem;color:var(--text-muted);">
+            Try: <button type="button" class="btn btn-sm p-0 text-primary fw-bold" onclick="document.getElementById('couponInput').value='WELCOME10'">WELCOME10</button>,
+            <button type="button" class="btn btn-sm p-0 text-primary fw-bold" onclick="document.getElementById('couponInput').value='DESI20'">DESI20</button>,
+            <button type="button" class="btn btn-sm p-0 text-primary fw-bold" onclick="document.getElementById('couponInput').value='INDIA15'">INDIA15</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="d-flex justify-content-between mt-4 flex-wrap gap-2">
+        <a href="{% url 'product_list' %}" class="btn btn-outline-secondary rounded-pill">
+          <i class="bi bi-arrow-left me-1"></i>Continue Shopping
+        </a>
+        <a href="{% url 'wishlist' %}" class="btn btn-outline-secondary rounded-pill">
+          <i class="bi bi-heart me-1"></i>View Wishlist
+        </a>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="col-lg-4">
+      <div class="cart-summary-card">
+        <h5 class="fw-bold mb-4" style="font-family:'Poppins',sans-serif;">Order Summary</h5>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Subtotal ({{ cart.item_count }} items)</span>
+          <span class="fw-bold" id="cart-total" data-amount="{{ cart.total }}">₹{{ cart.total }}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2" id="couponDiscountRow" style="display:none!important;">
+          <span class="text-success"><i class="bi bi-tag me-1"></i>Coupon Discount</span>
+          <span class="text-success fw-bold" id="couponDiscountAmount">-₹0</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Shipping</span>
+          <span class="text-success fw-bold">
+            {% if cart.total >= 499 %}
+            🚚 FREE
+            {% else %}
+            ₹49
+            {% endif %}
+          </span>
+        </div>
+        {% if cart.total < 499 %}
+        <div class="alert py-2 mt-2" style="background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.2);border-radius:10px;font-size:0.82rem;color:var(--primary);">
+          <i class="bi bi-truck me-1"></i>Add a bit more for <strong>FREE shipping!</strong>
+        </div>
+        {% endif %}
+        <hr>
+        <div class="d-flex justify-content-between mb-4">
+          <span class="fw-bold fs-5">Total</span>
+          <span class="fw-bold fs-5 text-primary" id="orderTotal" data-amount="{{ cart.total }}">
+            ₹{{ cart.total }}{% if cart.total < 499 %} + ₹49{% endif %}
+          </span>
+        </div>
+        <a href="{% url 'checkout' %}" class="btn-primary-custom d-block text-center" style="padding:1rem;">
+          <i class="bi bi-lock me-2"></i>Proceed to Checkout
+        </a>
+        <div class="mt-3 text-center">
+          <small class="text-muted"><i class="bi bi-shield-lock me-1"></i>Secure, encrypted checkout</small>
+        </div>
+
+        <!-- Payment icons -->
+        <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+          <span class="badge bg-light text-dark border" style="font-size:0.78rem;">UPI</span>
+          <span class="badge bg-light text-dark border" style="font-size:0.78rem;">VISA</span>
+          <span class="badge bg-light text-dark border" style="font-size:0.78rem;">Mastercard</span>
+          <span class="badge bg-light text-dark border" style="font-size:0.78rem;">COD</span>
+          <span class="badge bg-light text-dark border" style="font-size:0.78rem;">NetBanking</span>
+        </div>
+
+        <!-- Delivery estimate -->
+        <div class="delivery-badge mt-3 w-100 justify-content-center">
+          <i class="bi bi-calendar-check"></i>
+          <span>Estimated delivery: 3-7 business days</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon"><i class="bi bi-cart-x text-muted" style="font-size:4rem;"></i></div>
+    <div class="empty-state-title">Your cart is empty!</div>
+    <div class="empty-state-desc">Looks like you haven't added anything to your cart yet.<br>Discover amazing authentic Indian products!</div>
+    <div class="d-flex gap-3 justify-content-center flex-wrap mt-3">
+      <a href="{% url 'product_list' %}" class="btn-primary-custom">Explore Products</a>
+      <a href="{% url 'deals' %}" class="btn-outline-custom">🔥 View Deals</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+{% block extra_js %}
+<script>
+function changeQty(itemId, qty) {
+  qty = parseInt(qty);
+  if (isNaN(qty) || qty < 1) qty = 1;
+  if (qty > 10) qty = 10;
+  document.getElementById(`qty-${itemId}`).value = qty;
+  updateCartQty(itemId, qty);
+}
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}About Us — DesiBazaar{% endblock %}
+{% block content %}
+<!-- Hero -->
+<div style="background:linear-gradient(135deg,#FF6B35 0%,#FF8A5C 50%,#FFC107 100%);padding:5rem 0;position:relative;overflow:hidden;">
+  <div class="container text-white text-center position-relative" style="z-index:1;">
+    <h1 style="font-size:3rem;font-weight:800;margin-bottom:1rem;">Our Story</h1>
+    <p style="font-size:1.2rem;opacity:0.9;max-width:600px;margin:0 auto;">Connecting India's artisans, farmers, and local businesses with the world — one authentic product at a time.</p>
+  </div>
+</div>
+
+<div class="container py-5">
+  <!-- Mission -->
+  <div class="row align-items-center g-5 mb-5">
+    <div class="col-lg-6">
+      <div class="section-badge">OUR MISSION</div>
+      <h2 class="section-title mb-4">Why We Started DesiBazaar</h2>
+      <p class="text-muted" style="font-size:1rem;line-height:1.9;">India is home to thousands of unique regional products — from Kashmir's precious saffron to Kerala's aromatic spices, from Rajasthan's vibrant handicrafts to West Bengal's world-famous sweets. But these artisans and farmers rarely get the visibility or fair prices they deserve.</p>
+      <p class="text-muted mt-3" style="font-size:1rem;line-height:1.9;">DesiBazaar was founded to bridge this gap. We work directly with verified producers, artisans, and organic farmers across all 28 states to bring you genuinely authentic products while ensuring fair trade and sustainable livelihoods for producers.</p>
+    </div>
+    <div class="col-lg-6">
+      <div class="row g-3">
+        <div class="col-6"><div class="feature-card text-center"><div class="feature-icon"><i class="bi bi-people text-primary"></i></div><div class="feature-title">1000+</div><div class="feature-desc">Artisans & Producers</div></div></div>
+        <div class="col-6"><div class="feature-card text-center"><div class="feature-icon"><i class="bi bi-map text-primary"></i></div><div class="feature-title">28</div><div class="feature-desc">Indian States Covered</div></div></div>
+        <div class="col-6"><div class="feature-card text-center"><div class="feature-icon"><i class="bi bi-bag text-primary"></i></div><div class="feature-title">500+</div><div class="feature-desc">Authentic Products</div></div></div>
+        <div class="col-6"><div class="feature-card text-center"><div class="feature-icon"><i class="bi bi-emoji-smile text-primary"></i></div><div class="feature-title">10K+</div><div class="feature-desc">Happy Customers</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Values -->
+  <div class="text-center mb-5 mt-5">
+    <div class="section-badge">OUR VALUES</div>
+    <h2 class="section-title mx-auto" style="display:block;text-align:center;">What We Stand For</h2>
+  </div>
+  <div class="row g-4 mb-5">
+    <div class="col-sm-6 col-lg-3"><div class="feature-card"><div class="feature-icon"><i class="bi bi-handshake text-success"></i></div><div class="feature-title">Fair Trade</div><div class="feature-desc">We ensure producers get fair prices for their work, with 70% of every sale going directly to the maker.</div></div></div>
+    <div class="col-sm-6 col-lg-3"><div class="feature-card"><div class="feature-icon"><i class="bi bi-patch-check text-success"></i></div><div class="feature-title">Authenticity</div><div class="feature-desc">Every product is verified for authenticity. We do on-site audits and maintain strict quality standards.</div></div></div>
+    <div class="col-sm-6 col-lg-3"><div class="feature-card"><div class="feature-icon"><i class="bi bi-recycle text-success"></i></div><div class="feature-title">Sustainability</div><div class="feature-desc">Eco-friendly packaging, zero-plastic shipping, and preference for organic and sustainable products.</div></div></div>
+    <div class="col-sm-6 col-lg-3"><div class="feature-card"><div class="feature-icon"><i class="bi bi-globe text-success"></i></div><div class="feature-title">Community</div><div class="feature-desc">We invest in artisan training, digital literacy, and market access programs for rural producers.</div></div></div>
+  </div>
+
+  <!-- CTA -->
+  <div class="text-center p-5 rounded-xl" style="background:linear-gradient(135deg,rgba(255,107,53,0.08),rgba(255,193,7,0.05));">
+    <h3 class="fw-bold mb-3">Join the DesiBazaar Community</h3>
+    <p class="text-muted mb-4">Every purchase you make supports a local artisan or farmer. Let's celebrate India's rich cultural heritage together.</p>
+    <a href="{% url 'product_list' %}" class="btn-primary-custom me-3">Shop Now</a>
+    <a href="{% url 'contact' %}" class="btn-outline-custom">Contact Us</a>
+  </div>
+</div>
+{% endblock %}

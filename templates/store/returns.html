@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Returns & Refunds — DesiBazaar{% endblock %}
+{% block content %}
+<div style="background:linear-gradient(135deg,#2E7D32,#4CAF50);padding:3rem 0;">
+  <div class="container text-white text-center">
+    <h1 style="font-size:2.5rem;font-weight:800;">Returns & Refunds</h1>
+    <p style="opacity:0.9;">Hassle-free returns within 7 days</p>
+  </div>
+</div>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="row g-4 mb-5">
+        <div class="col-md-4"><div class="feature-card text-center"><div class="feature-icon"><i class="bi bi-box-seam text-primary"></i></div><div class="feature-title">7-Day Returns</div><div class="feature-desc">Return within 7 days of delivery for most products</div></div></div>
+        <div class="col-md-4"><div class="feature-card text-center"><div class="feature-icon"><i class="bi bi-currency-rupee text-primary"></i></div><div class="feature-title">Full Refund</div><div class="feature-desc">Get a complete refund within 5-7 business days</div></div></div>
+        <div class="col-md-4"><div class="feature-card text-center"><div class="feature-icon"><i class="bi bi-truck text-primary"></i></div><div class="feature-title">Free Pickup</div><div class="feature-desc">We arrange free pickup for all returns</div></div></div>
+      </div>
+
+      <div class="p-4 rounded-xl" style="background:var(--card-bg);border:1px solid rgba(255,107,53,0.1);">
+        <h4 class="fw-bold mb-3">How to Return</h4>
+        <ol style="color:var(--text-muted);line-height:2;">
+          <li>Go to "My Orders" and select the order you want to return</li>
+          <li>Click "Request Return" and select a reason</li>
+          <li>Our team will review and approve within 24 hours</li>
+          <li>We'll schedule a free pickup from your address</li>
+          <li>Refund is processed within 5-7 business days after pickup</li>
+        </ol>
+        <hr class="divider">
+        <h4 class="fw-bold mb-3">Non-Returnable Items</h4>
+        <ul style="color:var(--text-muted);line-height:2;">
+          <li>Perishable food items (unless damaged or defective)</li>
+          <li>Opened edible products</li>
+          <li>Customized or personalized items</li>
+          <li>Intimate or sanitary goods</li>
+        </ul>
+        <hr class="divider">
+        <h4 class="fw-bold mb-3">Refund Methods</h4>
+        <p class="text-muted">Refunds are credited to the original payment method — UPI, bank account, or card. COD orders are refunded via bank transfer within 7 business days.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}Contact Us — DesiBazaar{% endblock %}
+{% block content %}
+<div style="background:linear-gradient(135deg,#FF6B35 0%,#FFC107 100%);padding:3rem 0;">
+  <div class="container text-white text-center">
+    <h1 style="font-size:2.5rem;font-weight:800;">Get In Touch</h1>
+    <p style="opacity:0.9;">We'd love to hear from you. Our team typically responds within 24 hours.</p>
+  </div>
+</div>
+<div class="container py-5">
+  <div class="row g-5">
+    <!-- Contact Info -->
+    <div class="col-lg-4">
+      <div class="p-4 rounded-xl h-100" style="background:var(--card-bg);border:1px solid rgba(255,107,53,0.1);">
+        <h4 class="fw-bold mb-4">Contact Information</h4>
+        <div class="d-flex gap-3 mb-4">
+          <div class="feature-icon" style="width:48px;height:48px;font-size:1.2rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><i class="bi bi-envelope text-primary"></i></div>
+          <div>
+            <div class="fw-bold">Email</div>
+            <a href="mailto:hello@desibazaar.in" class="text-muted">hello@desibazaar.in</a>
+          </div>
+        </div>
+        <div class="d-flex gap-3 mb-4">
+          <div class="feature-icon" style="width:48px;height:48px;font-size:1.2rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><i class="bi bi-telephone text-primary"></i></div>
+          <div>
+            <div class="fw-bold">Phone</div>
+            <a href="tel:+911800123456" class="text-muted">1800-123-4567 (Free)</a>
+            <div class="text-muted small">Mon-Sat, 9AM–7PM IST</div>
+          </div>
+        </div>
+        <div class="d-flex gap-3 mb-4">
+          <div class="feature-icon" style="width:48px;height:48px;font-size:1.2rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><i class="bi bi-geo-alt text-primary"></i></div>
+          <div>
+            <div class="fw-bold">Office</div>
+            <div class="text-muted small">DesiBazaar Technologies Pvt Ltd<br>Bandra Kurla Complex,<br>Mumbai, Maharashtra 400051</div>
+          </div>
+        </div>
+        <hr class="divider">
+        <div class="fw-bold mb-3">Follow Us</div>
+        <div class="footer-social">
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-facebook"></i></a>
+          <a href="#"><i class="bi bi-twitter-x"></i></a>
+          <a href="#"><i class="bi bi-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="col-lg-8">
+      <div class="p-4 rounded-xl" style="background:var(--card-bg);border:1px solid rgba(255,107,53,0.1);">
+        <h4 class="fw-bold mb-4">Send Us a Message</h4>
+        {% if success %}
+        <div class="alert alert-success rounded-xl py-4 text-center">
+          <div style="font-size:2rem;"><i class="bi bi-patch-check text-success"></i></div>
+          <h5 class="fw-bold mt-2">Message Sent!</h5>
+          <p class="mb-0">Thank you for reaching out. We'll get back to you within 24 hours.</p>
+        </div>
+        {% else %}
+        <form method="POST">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Your Name *</label>
+              {{ form.name }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email *</label>
+              {{ form.email }}
+            </div>
+            <div class="col-12">
+              <label class="form-label">Subject *</label>
+              {{ form.subject }}
+            </div>
+            <div class="col-12">
+              <label class="form-label">Message *</label>
+              {{ form.message }}
+            </div>
+          </div>
+          <button type="submit" class="btn-primary-custom mt-4" style="border:none;padding:0.75rem 2rem;">
+            <i class="bi bi-send me-2"></i>Send Message
+          </button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

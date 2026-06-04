@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}Deals & Offers — DesiBazaar{% endblock %}
+{% block meta_desc %}Shop the best deals on authentic Indian products. Huge discounts on handicrafts, organic foods, spices, textiles and more.{% endblock %}
+{% block content %}
+
+<!-- Deals Hero -->
+<div style="background:linear-gradient(135deg,#e53935 0%,#FF6B35 50%,#FFC107 100%);padding:3rem 0;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:url('data:image/svg+xml,%3Csvg width=60 height=60 viewBox=0 0 60 60 xmlns=http://www.w3.org/2000/svg%3E%3Cg fill=%23ffffff fill-opacity=0.06%3E%3Ccircle cx=30 cy=30 r=4/%3E%3C/g%3E%3C/svg%3E');"></div>
+  <div class="container position-relative" style="z-index:2;color:white;text-align:center;">
+    <div class="section-badge mb-3" style="background:rgba(255,255,255,0.2);color:white;">Limited Time Offers</div>
+    <h1 style="font-family:'Poppins',sans-serif;font-size:3rem;font-weight:800;text-shadow:0 4px 24px rgba(0,0,0,0.2);">
+      Deals & Offers
+    </h1>
+    <p style="font-size:1.1rem;opacity:0.92;margin-bottom:2rem;">Save big on authentic Indian products from every corner of India</p>
+    <div class="d-flex justify-content-center gap-4 flex-wrap">
+      <div style="text-align:center;">
+        <div style="font-size:2.2rem;font-weight:800;">{{ deals_count }}</div>
+        <div style="font-size:0.85rem;opacity:0.85;">Active Deals</div>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,0.3);"></div>
+      <div style="text-align:center;">
+        <div style="font-size:2.2rem;font-weight:800;">Up to 50%</div>
+        <div style="font-size:0.85rem;opacity:0.85;">Max Discount</div>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,0.3);"></div>
+      <div style="text-align:center;">
+        <div style="font-size:2.2rem;font-weight:800;">₹{{ total_savings|floatformat:0 }}</div>
+        <div style="font-size:0.85rem;opacity:0.85;">Total Savings Available</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Coupon Banner -->
+<div style="background:linear-gradient(90deg,#2E7D32,#4CAF50);padding:0.8rem 0;text-align:center;color:white;font-family:'Poppins',sans-serif;font-weight:600;font-size:0.9rem;">
+  Use coupon codes: 
+  <span style="background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:4px;margin:0 4px;">WELCOME10</span>
+  <span style="background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:4px;margin:0 4px;">DESI20</span>
+  <span style="background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:4px;margin:0 4px;">FESTIVE25</span>
+  for extra savings!
+</div>
+
+<div class="container py-5">
+  <!-- Filter bar -->
+  <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between mb-4">
+    <div class="d-flex flex-wrap gap-2">
+      <a href="{% url 'deals' %}" class="btn btn-sm rounded-pill {% if not current_category %}btn-primary{% else %}btn-outline-secondary{% %}">All Deals</a>
+      {% for cat in categories %}
+      <a href="{% url 'deals' %}?category={{ cat.slug }}" 
+         class="btn btn-sm rounded-pill {% if current_category == cat.slug %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+        {{ cat.name }}
+      </a>
+      {% endfor %}
+    </div>
+    <div>
+      <select onchange="window.location='{% url 'deals' %}?sort='+this.value" class="form-select form-select-sm" style="width:auto;">
+        <option value="newest">Newest First</option>
+        <option value="price_low">Price: Low to High</option>
+        <option value="price_high">Price: High to Low</option>
+        <option value="rating">Best Rated</option>
+      </select>
+    </div>
+  </div>
+
+  {% if page_obj %}
+  <div class="row g-4">
+    {% for product in page_obj %}
+    <div class="col-6 col-md-4 col-lg-3 fade-up">
+      {% include 'store/includes/product_card.html' with product=product %}
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  {% if page_obj.has_other_pages %}
+  <nav class="mt-5 d-flex justify-content-center">
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">←</a></li>
+      {% endif %}
+      {% for num in page_obj.paginator.page_range %}
+      <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+      </li>
+      {% endfor %}
+      {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">→</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon"><i class="bi bi-tag text-muted" style="font-size:4rem;"></i></div>
+    <div class="empty-state-title">No deals available right now</div>
+    <div class="empty-state-desc">Check back soon for amazing offers!</div>
+    <a href="{% url 'product_list' %}" class="btn-primary-custom">Browse All Products</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

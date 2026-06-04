@@ -1,0 +1,549 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}DesiBazaar — Authentic Indian Products From Every Corner of India{% endblock %}
+{% block meta_desc %}Shop 500+ authentic Indian products — handcrafted goods, organic produce, traditional foods from all 28 states. Direct from artisans. Free shipping on ₹599+.{% endblock %}
+
+{% block content %}
+
+<!-- ═══ HERO SECTION ═══ -->
+<section class="hero-section">
+  <div class="container position-relative" style="z-index:2;">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6 hero-content">
+        <div class="hero-badge">🇮🇳 India's Premium Regional Marketplace</div>
+        <h1 class="hero-title">Discover India<br><span style="color:rgba(255,255,255,0.9);">Through</span> Products</h1>
+        <p class="hero-subtitle">Authentic handcrafted goods, organic produce, traditional foods, and rare regional specialties — sourced directly from artisans across all 28 states.</p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="{% url 'product_list' %}" class="btn-primary-custom" style="background:white;color:var(--primary);">
+            <i class="bi bi-bag me-2"></i>Shop Now
+          </a>
+          <a href="{% url 'deals' %}" class="btn-outline-custom" style="color:white;border-color:rgba(255,255,255,0.6);">
+            🔥 Today's Deals
+          </a>
+        </div>
+        <div class="hero-stats mt-4">
+          <div class="hero-stat">
+            <div class="hero-stat-num" data-count="500">0+</div>
+            <div class="hero-stat-label">Products</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num" data-count="28">0</div>
+            <div class="hero-stat-label">States</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num" data-count="10000" data-suffix="K+">0+</div>
+            <div class="hero-stat-label">Happy Buyers</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num" data-count="500" data-suffix="+">0</div>
+            <div class="hero-stat-label">Artisans</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 d-none d-lg-block text-end">
+        <div style="position:relative; display:inline-block;">
+          <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=80" alt="Indian Marketplace" class="hero-image-float" style="width:480px;height:380px;object-fit:cover;" loading="eager">
+          <!-- Floating badges -->
+          <div style="position:absolute;top:-20px;left:-20px;background:white;border-radius:16px;padding:1rem 1.4rem;box-shadow:0 8px 30px rgba(0,0,0,0.15);animation:heroFloat 3s ease-in-out infinite 0.5s;">
+            <div style="font-size:0.7rem;color:#999;font-weight:600;">✨ NEW ARRIVAL</div>
+            <div style="font-weight:800;color:#333;font-size:0.9rem;">Kashmir Saffron</div>
+            <div style="font-size:0.75rem;color:#FF6B35;font-weight:700;">⭐ 4.9 · Grade A</div>
+          </div>
+          <div style="position:absolute;bottom:-15px;right:-15px;background:white;border-radius:16px;padding:0.8rem 1.2rem;box-shadow:0 8px 30px rgba(0,0,0,0.15);animation:heroFloat 3.5s ease-in-out infinite 1s;">
+            <div style="font-size:0.7rem;color:#999;font-weight:600;">🔥 TRENDING</div>
+            <div style="font-weight:800;color:#333;font-size:0.9rem;">200+ Products</div>
+            <div style="font-size:0.75rem;color:#2E7D32;font-weight:700;">🚚 Free Shipping ₹499+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MARQUEE TRUST BAR ═══ -->
+<div style="background:var(--primary);padding:0.75rem 0;overflow:hidden;">
+  <div style="white-space:nowrap;animation:marqueeScroll 25s linear infinite;display:inline-block;">
+    {% for item in "12345"|make_list %}
+    <span style="color:white;font-size:0.85rem;font-weight:600;margin:0 2.5rem;">✅ 100% Authentic Products</span>
+    <span style="color:rgba(255,255,255,0.5);">•</span>
+    <span style="color:white;font-size:0.85rem;font-weight:600;margin:0 2.5rem;">🚚 Pan-India Delivery</span>
+    <span style="color:rgba(255,255,255,0.5);">•</span>
+    <span style="color:white;font-size:0.85rem;font-weight:600;margin:0 2.5rem;">🎨 500+ Artisan Products</span>
+    <span style="color:rgba(255,255,255,0.5);">•</span>
+    <span style="color:white;font-size:0.85rem;font-weight:600;margin:0 2.5rem;">🌿 Sustainable Packaging</span>
+    <span style="color:rgba(255,255,255,0.5);">•</span>
+    <span style="color:white;font-size:0.85rem;font-weight:600;margin:0 2.5rem;">🔒 Secure Payments</span>
+    <span style="color:rgba(255,255,255,0.5);">•</span>
+    {% endfor %}
+  </div>
+</div>
+<style>
+@keyframes marqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+</style>
+
+<!-- ═══ FLASH SALE SECTION ═══ -->
+<section class="flash-sale-section">
+  <div class="container position-relative" style="z-index:1;">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div class="flash-sale-badge">⚡ Flash Sale</div>
+        <h2 style="font-family:'Poppins',sans-serif;font-size:2.5rem;font-weight:800;color:white;margin-bottom:0.5rem;">
+          Deals End In
+        </h2>
+        <p style="color:rgba(255,255,255,0.7);margin-bottom:0;">Up to 50% off on selected products. Don't miss out!</p>
+        <div class="countdown-timer">
+          <div class="countdown-unit">
+            <span class="countdown-num" id="cdHours">06</span>
+            <span class="countdown-label">Hours</span>
+          </div>
+          <span class="countdown-sep">:</span>
+          <div class="countdown-unit">
+            <span class="countdown-num" id="cdMins">23</span>
+            <span class="countdown-label">Mins</span>
+          </div>
+          <span class="countdown-sep">:</span>
+          <div class="countdown-unit">
+            <span class="countdown-num" id="cdSecs">45</span>
+            <span class="countdown-label">Secs</span>
+          </div>
+        </div>
+        <a href="{% url 'deals' %}" class="btn-primary-custom d-inline-block mt-2">
+          <i class="bi bi-lightning-charge me-2"></i>View All Deals
+        </a>
+      </div>
+      <div class="col-lg-6">
+        <div class="row g-3">
+          {% for product in all_products|slice:":4" %}
+          <div class="col-6">
+            <a href="{% url 'product_detail' product.slug %}" class="text-decoration-none">
+              <div class="product-card" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);">
+                <div class="product-card-img-wrap" style="height:120px;">
+                  <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+                  {% if product.discount_price %}
+                  <div class="discount-badge">-{{ product.discount_percentage }}%</div>
+                  {% endif %}
+                </div>
+                <div class="product-card-body" style="padding:0.6rem;">
+                  <div class="product-name" style="color:white;font-size:0.82rem;-webkit-line-clamp:1;line-clamp:1;">{{ product.name }}</div>
+                  <div style="color:var(--accent);font-weight:800;font-size:0.9rem;">₹{{ product.effective_price }}</div>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% empty %}
+          <div class="col-12 text-center text-white opacity-75">
+            <i class="bi bi-bag fs-1 mb-3 d-block"></i>
+            <p>Great deals coming soon! Add products via admin.</p>
+            <a href="{% url 'product_list' %}" class="btn-outline-custom" style="color:white;border-color:rgba(255,255,255,0.5);">Browse Products</a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CATEGORIES ═══ -->
+<section class="section-py">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">BROWSE BY CATEGORY</div>
+      <h2 class="section-title mx-auto" style="display:block;text-align:center;">Shop By Category</h2>
+      <p class="text-muted mt-3">Explore our curated collection of authentic Indian products across 20 categories</p>
+    </div>
+    <div class="row g-3">
+      {% for cat in categories %}
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2 fade-up">
+        <a href="{% url 'product_list' %}?category={{ cat.slug }}" class="text-decoration-none">
+          <div class="category-card">
+            {% if cat.image_url %}
+            <img src="{{ cat.image_url }}" alt="{{ cat.name }}" class="category-img" loading="lazy">
+            {% else %}
+            <span class="category-icon"><i class="bi bi-tag text-primary"></i></span>
+            {% endif %}
+            <div class="category-name">{{ cat.name }}</div>
+            <div class="category-count">{{ cat.products.count }} products</div>
+          </div>
+        </a>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5 text-muted">
+        <i class="bi bi-grid-3x3-gap fs-1 d-block mb-3"></i>
+        No categories yet. Add some in the admin panel.
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURED PRODUCTS ═══ -->
+{% if featured_products %}
+<section class="section-py" style="background:rgba(255,107,53,0.03);">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between mb-5 flex-wrap gap-3">
+      <div>
+        <div class="section-badge">⭐ HAND-PICKED</div>
+        <h2 class="section-title">Featured Products</h2>
+      </div>
+      <a href="{% url 'product_list' %}" class="btn-outline-custom">View All <i class="bi bi-arrow-right ms-1"></i></a>
+    </div>
+    <div class="row g-4">
+      {% for product in featured_products %}
+      <div class="col-6 col-md-4 col-lg-3 fade-up">
+        {% include 'store/includes/product_card.html' with product=product %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ═══ STATS COUNTER ═══ -->
+<section class="stat-counter-section">
+  <div class="container position-relative" style="z-index:1;">
+    <div class="row g-4 text-center">
+      <div class="col-6 col-md-3 fade-up">
+        <div class="stat-counter-card">
+          <span class="stat-counter-num" data-target="500" data-suffix="+">0+</span>
+          <div class="stat-counter-label">Authentic Products</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 fade-up">
+        <div class="stat-counter-card">
+          <span class="stat-counter-num" data-target="28" data-suffix="">0</span>
+          <div class="stat-counter-label">Indian States Covered</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 fade-up">
+        <div class="stat-counter-card">
+          <span class="stat-counter-num" data-target="10000" data-suffix="+">0+</span>
+          <div class="stat-counter-label">Happy Customers</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 fade-up">
+        <div class="stat-counter-card">
+          <span class="stat-counter-num" data-target="500" data-suffix="+">0+</span>
+          <div class="stat-counter-label">Artisan Partners</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WHY CHOOSE US ═══ -->
+<section class="section-py">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">WHY DESIBAZAAR</div>
+      <h2 class="section-title mx-auto" style="display:block;text-align:center;">Why Shop With Us?</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-sm-6 col-lg-3 fade-up">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-patch-check text-primary"></i></div>
+          <div class="feature-title">100% Authentic</div>
+          <div class="feature-desc">Every product is sourced directly from verified artisans, farmers and cooperatives across India.</div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3 fade-up">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-truck text-primary"></i></div>
+          <div class="feature-title">Pan-India Delivery</div>
+          <div class="feature-desc">Fast and secure delivery to every corner of India. Free shipping on orders above ₹499.</div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3 fade-up">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-credit-card text-primary"></i></div>
+          <div class="feature-title">Secure Payments</div>
+          <div class="feature-desc">Multiple payment options including UPI, cards, net banking, and cash on delivery.</div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3 fade-up">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-recycle text-primary"></i></div>
+          <div class="feature-title">Eco-Friendly</div>
+          <div class="feature-desc">Sustainable packaging and a commitment to supporting green, organic, and eco-friendly products.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRENDING PRODUCTS ═══ -->
+{% if trending_products %}
+<section class="section-py" style="background:rgba(46,125,50,0.03);">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between mb-5 flex-wrap gap-3">
+      <div>
+        <div class="section-badge" style="background:rgba(255,193,7,0.15);color:#e0a800;">🔥 TRENDING</div>
+        <h2 class="section-title">Trending Now</h2>
+      </div>
+      <a href="{% url 'product_list' %}" class="btn-outline-custom">Explore All <i class="bi bi-arrow-right ms-1"></i></a>
+    </div>
+    <div class="row g-4">
+      {% for product in trending_products %}
+      <div class="col-6 col-md-4 col-lg-3 fade-up">
+        {% include 'store/includes/product_card.html' with product=product %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ═══ EXPLORE INDIA ═══ -->
+<section class="section-py">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">REGIONAL PICKS</div>
+      <h2 class="section-title mx-auto" style="display:block;text-align:center;">Explore India</h2>
+      <p class="text-muted mt-3">Discover unique products from every region of our incredible country</p>
+    </div>
+    <div class="row g-3">
+      {% for state in states_list %}
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2 fade-up">
+        <a href="{% url 'search_results' %}?q={{ state.name }}" class="text-decoration-none">
+          <div class="india-explore-card">
+            <span class="india-state-emoji"><i class="bi bi-geo-alt-fill text-primary"></i></span>
+            <div class="india-state-name">{{ state.name }}</div>
+            <div class="india-state-products">{{ state.count }} products</div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RECENTLY VIEWED ═══ -->
+<section id="recentlyViewedSection" style="padding:2rem 0 3rem;display:none;">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <div>
+        <div class="section-badge">YOUR HISTORY</div>
+        <h2 class="section-title" style="font-size:1.5rem;">Recently Viewed</h2>
+      </div>
+    </div>
+    <div class="scroll-strip" id="recentlyViewedContainer">
+      <!-- Filled via AJAX -->
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ARTISANS SPOTLIGHT ═══ -->
+<section class="section-py" style="background:linear-gradient(135deg, rgba(255,107,53,0.04) 0%, rgba(46,125,50,0.04) 100%);">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">MEET THE MAKERS</div>
+      <h2 class="section-title mx-auto" style="display:block;text-align:center;">Artisan Stories</h2>
+      <p class="text-muted mt-3">Real people, real craftsmanship — the hands behind every product</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 fade-up">
+        <div class="testimonial-card" style="text-align:center;">
+          <img src="https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?w=200&h=200&fit=crop" alt="Ramesh Kumar" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin:0 auto 1rem;display:block;border:3px solid var(--primary);">
+          <div style="font-weight:800;font-family:'Poppins',sans-serif;">Ramesh Kumar</div>
+          <div style="font-size:0.82rem;color:var(--primary);font-weight:700;margin-bottom:0.75rem;">Blue Pottery · Rajasthan</div>
+          <p class="text-muted" style="font-size:0.88rem;line-height:1.6;">For 30 years, Ramesh has kept the ancient art of Jaipur Blue Pottery alive. His turquoise glazed bowls are recognized worldwide.</p>
+          <a href="{% url 'artisan_stories' %}" class="btn-outline-custom" style="font-size:0.82rem;padding:0.4rem 1.2rem;margin-top:0.75rem;display:inline-block;">Read Story</a>
+        </div>
+      </div>
+      <div class="col-md-4 fade-up">
+        <div class="testimonial-card" style="text-align:center;">
+          <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=200&h=200&fit=crop" alt="Meena Devi" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin:0 auto 1rem;display:block;border:3px solid var(--primary);">
+          <div style="font-weight:800;font-family:'Poppins',sans-serif;">Meena Devi</div>
+          <div style="font-size:0.82rem;color:var(--primary);font-weight:700;margin-bottom:0.75rem;">Madhubani Painting · Bihar</div>
+          <p class="text-muted" style="font-size:0.88rem;line-height:1.6;">Meena runs a cooperative of 25 women artists, bringing centuries-old Mithila folk art to global markets.</p>
+          <a href="{% url 'artisan_stories' %}" class="btn-outline-custom" style="font-size:0.82rem;padding:0.4rem 1.2rem;margin-top:0.75rem;display:inline-block;">Read Story</a>
+        </div>
+      </div>
+      <div class="col-md-4 fade-up">
+        <div class="testimonial-card" style="text-align:center;">
+          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&h=200&fit=crop" alt="Arjun Singh" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin:0 auto 1rem;display:block;border:3px solid var(--primary);">
+          <div style="font-weight:800;font-family:'Poppins',sans-serif;">Arjun Singh</div>
+          <div style="font-size:0.82rem;color:var(--primary);font-weight:700;margin-bottom:0.75rem;">Organic Spices · Kerala</div>
+          <p class="text-muted" style="font-size:0.88rem;line-height:1.6;">12 acres of certified organic spice gardens in Wayanad. No pesticides — just Kerala's rich soil and tradition.</p>
+          <a href="{% url 'artisan_stories' %}" class="btn-outline-custom" style="font-size:0.82rem;padding:0.4rem 1.2rem;margin-top:0.75rem;display:inline-block;">Read Story</a>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <a href="{% url 'artisan_stories' %}" class="btn-primary-custom">Meet All Artisans <i class="bi bi-arrow-right ms-1"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section class="section-py" style="background:rgba(255,107,53,0.03);">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">HAPPY CUSTOMERS</div>
+      <h2 class="section-title mx-auto" style="display:block;text-align:center;">What Our Customers Say</h2>
+      <div class="d-flex justify-content-center gap-1 mt-2">
+        <i class="bi bi-star-fill text-warning"></i>
+        <i class="bi bi-star-fill text-warning"></i>
+        <i class="bi bi-star-fill text-warning"></i>
+        <i class="bi bi-star-fill text-warning"></i>
+        <i class="bi bi-star-fill text-warning"></i>
+        <span class="ms-2 text-muted small fw-bold">4.9/5 from 2,800+ reviews</span>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 fade-up">
+        <div class="testimonial-card">
+          <div class="testimonial-quote">"</div>
+          <div class="testimonial-text">The Kashmiri saffron I bought from DesiBazaar is the most authentic I've ever tasted. You can really tell the difference from the saffron in supermarkets.</div>
+          <div class="d-flex align-items-center gap-3">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Priya" class="testimonial-avatar">
+            <div>
+              <div class="testimonial-name">Priya Sharma</div>
+              <div class="testimonial-location"><i class="bi bi-geo-alt text-primary"></i> Delhi</div>
+              <div class="text-warning" style="font-size:0.8rem;">★★★★★</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 fade-up">
+        <div class="testimonial-card">
+          <div class="testimonial-quote">"</div>
+          <div class="testimonial-text">Ordered a Madhubani painting as a gift for my parents. The quality exceeded expectations — the artisan's certificate of authenticity made it extra special.</div>
+          <div class="d-flex align-items-center gap-3">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Rahul" class="testimonial-avatar">
+            <div>
+              <div class="testimonial-name">Rahul Verma</div>
+              <div class="testimonial-location"><i class="bi bi-geo-alt text-primary"></i> Bengaluru</div>
+              <div class="text-warning" style="font-size:0.8rem;">★★★★★</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 fade-up">
+        <div class="testimonial-card">
+          <div class="testimonial-quote">"</div>
+          <div class="testimonial-text">I love that DesiBazaar sources directly from producers. My A2 cow ghee arrived with the farm story printed on the jar. Absolutely love this concept!</div>
+          <div class="d-flex align-items-center gap-3">
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Anjali" class="testimonial-avatar">
+            <div>
+              <div class="testimonial-name">Anjali Menon</div>
+              <div class="testimonial-location"><i class="bi bi-geo-alt text-primary"></i> Chennai</div>
+              <div class="text-warning" style="font-size:0.8rem;">★★★★★</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NEWSLETTER ═══ -->
+<section class="newsletter-section">
+  <div class="container text-center position-relative" style="z-index:1;">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <span class="hero-badge">📬 Stay Connected</span>
+        <h2 class="newsletter-title">Get Exclusive Deals!</h2>
+        <p class="newsletter-sub">Join 10,000+ subscribers for early access to new products, seasonal offers, and artisan stories.</p>
+        <form id="newsletterForm" method="POST" action="{% url 'newsletter' %}">
+          {% csrf_token %}
+          <div class="input-group">
+            <input type="email" name="email" class="form-control newsletter-input" placeholder="Enter your email address" required>
+            <button class="btn newsletter-btn" type="submit"><i class="bi bi-send me-1"></i> Subscribe</button>
+          </div>
+          <p style="font-size:0.78rem;color:rgba(255,255,255,0.6);margin-top:0.8rem;">No spam. Unsubscribe anytime. 🌿</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ── Flash Sale Countdown ──
+(function() {
+  // Set end time 8 hours from now (or use a fixed date)
+  const storageKey = 'db-flash-sale-end';
+  let endTime = localStorage.getItem(storageKey);
+  if (!endTime || Date.now() > parseInt(endTime)) {
+    endTime = Date.now() + (8 * 3600 + 23 * 60 + 45) * 1000;
+    localStorage.setItem(storageKey, endTime);
+  }
+  endTime = parseInt(endTime);
+
+  function updateCountdown() {
+    const diff = Math.max(0, endTime - Date.now());
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    const pad = n => String(n).padStart(2, '0');
+    const hEl = document.getElementById('cdHours');
+    const mEl = document.getElementById('cdMins');
+    const sEl = document.getElementById('cdSecs');
+    if (hEl) hEl.textContent = pad(h);
+    if (mEl) mEl.textContent = pad(m);
+    if (sEl) sEl.textContent = pad(s);
+    if (diff === 0) {
+      localStorage.removeItem(storageKey);
+    }
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+})();
+
+// ── Stats Counter Animation ──
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target) || 0;
+  const suffix = el.dataset.suffix || '';
+  const duration = 1800;
+  const step = target / (duration / 16);
+  let current = 0;
+  const timer = setInterval(() => {
+    current = Math.min(current + step, target);
+    if (target >= 10000) {
+      el.textContent = (current / 1000).toFixed(1) + 'K' + suffix;
+    } else {
+      el.textContent = Math.floor(current) + suffix;
+    }
+    if (current >= target) clearInterval(timer);
+  }, 16);
+}
+
+// Use IntersectionObserver for counters
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCounter(e.target);
+      counterObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.stat-counter-num').forEach(el => counterObs.observe(el));
+
+// ── Recently Viewed (show section if has data) ──
+fetch('/api/recently-viewed/')
+  .then(r => r.json())
+  .then(data => {
+    const section = document.getElementById('recentlyViewedSection');
+    const container = document.getElementById('recentlyViewedContainer');
+    if (!section || !container || !data.products.length) return;
+    section.style.display = 'block';
+    container.innerHTML = data.products.map(p => `
+      <div style="flex-shrink:0;width:200px;scroll-snap-align:start;">
+        <a href="/products/${p.slug}/" class="text-decoration-none">
+          <div class="product-card h-100 overflow-hidden">
+            <div class="product-card-img-wrap" style="height:140px;">
+              <img src="${p.image}" alt="${p.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="product-card-body" style="padding:0.75rem;">
+              <div class="product-category-tag">${p.category}</div>
+              <div class="product-name" style="font-size:0.85rem;-webkit-line-clamp:2;line-clamp:2;">${p.name}</div>
+              <div class="product-price mt-2">₹${p.price}</div>
+            </div>
+          </div>
+        </a>
+      </div>`).join('');
+  }).catch(() => {});
+</script>
+{% endblock %}

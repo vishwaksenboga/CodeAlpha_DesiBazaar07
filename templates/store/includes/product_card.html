@@ -1,0 +1,64 @@
+{% load static %}
+<div class="product-card shadow-sm" onclick="window.location='{% url 'product_detail' product.slug %}'">
+  <div class="product-card-img-wrap">
+    <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy"
+         onerror="this.src='https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400'">
+    {% if product.discount_percentage %}
+    <span class="discount-badge">{{ product.discount_percentage }}% OFF</span>
+    {% endif %}
+    {% if product.is_trending %}
+    <span class="trending-badge">Trending</span>
+    {% endif %}
+    <div class="product-card-overlay">
+      <!-- Quick View -->
+      <button class="overlay-btn overlay-btn-quick"
+              onclick="event.stopPropagation(); openQuickView({{ product.id }})"
+              title="Quick View">
+        <i class="bi bi-eye"></i>
+      </button>
+      {% if user.is_authenticated %}
+      <!-- Add to Cart -->
+      <button class="overlay-btn overlay-btn-cart"
+              onclick="event.stopPropagation(); addToCartAjax({{ product.id }}, this)"
+              title="Add to cart">
+        <i class="bi bi-bag-plus"></i>
+      </button>
+      <!-- Wishlist -->
+      <button class="overlay-btn overlay-btn-wish wishlist-btn"
+              onclick="event.stopPropagation(); toggleWishlistAjax({{ product.id }}, this)"
+              title="Add to wishlist">
+        <i class="bi bi-heart"></i>
+      </button>
+      <!-- Compare -->
+      <button class="overlay-btn overlay-btn-compare"
+              onclick="event.stopPropagation(); toggleCompare({{ product.id }}, this)"
+              title="Compare">
+        <i class="bi bi-bar-chart-line"></i>
+      </button>
+      {% else %}
+      <a href="{% url 'login' %}?next={{ request.path }}" class="overlay-btn overlay-btn-cart" onclick="event.stopPropagation()">
+        <i class="bi bi-bag-plus"></i>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="product-card-body">
+    <div class="product-category-tag">{{ product.category.name }}</div>
+    <div class="product-name">{{ product.name }}</div>
+    <div class="product-state"><i class="bi bi-geo-alt-fill"></i> {{ product.state_origin }}</div>
+    <div class="product-rating">
+      <div class="stars">
+        {% for i in "12345" %}
+        {% if forloop.counter <= product.rating|floatformat:"0"|add:"0" %}★{% else %}☆{% endif %}
+        {% endfor %}
+      </div>
+      <span class="count">({{ product.review_count }})</span>
+    </div>
+    <div class="product-price-wrap">
+      <span class="product-price">₹{{ product.effective_price }}</span>
+      {% if product.discount_price %}
+      <span class="product-price-original">₹{{ product.price }}</span>
+      {% endif %}
+    </div>
+  </div>
+</div>

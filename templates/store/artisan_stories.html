@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block title %}Artisan Stories — Meet the Makers | DesiBazaar{% endblock %}
+{% block meta_desc %}Meet the artisans, weavers, farmers and craftspeople behind DesiBazaar's authentic Indian products. Real people, real stories.{% endblock %}
+{% block content %}
+
+<!-- Hero -->
+<div style="background:linear-gradient(135deg,#4a148c,#7b1fa2,#FF6B35);padding:4rem 0;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;opacity:0.08;background-image:url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=1200');background-size:cover;background-position:center;"></div>
+  <div class="container position-relative text-white text-center" style="z-index:2;">
+    <div class="section-badge mb-3" style="background:rgba(255,255,255,0.15);color:white;font-size:0.9rem;">Behind Every Product</div>
+    <h1 style="font-family:'Poppins',sans-serif;font-size:3rem;font-weight:800;text-shadow:0 4px 24px rgba(0,0,0,0.3);">
+      Meet Our Artisans
+    </h1>
+    <p style="font-size:1.15rem;opacity:0.92;max-width:600px;margin:1rem auto 2.5rem;">
+      Every product on DesiBazaar carries a story. Meet the hands that craft, grow, and create the authentic Indian products you love.
+    </p>
+    <div class="d-flex justify-content-center gap-5 flex-wrap">
+      <div class="text-center">
+        <div style="font-size:2.5rem;font-weight:800;">{{ total_artisans }}+</div>
+        <div style="opacity:0.85;font-size:0.9rem;">Artisan Partners</div>
+      </div>
+      <div class="text-center">
+        <div style="font-size:2.5rem;font-weight:800;">{{ states_covered }}</div>
+        <div style="opacity:0.85;font-size:0.9rem;">States</div>
+      </div>
+      <div class="text-center">
+        <div style="font-size:2.5rem;font-weight:800;">{{ products_created }}+</div>
+        <div style="opacity:0.85;font-size:0.9rem;">Unique Products</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mission Strip -->
+<div style="background:linear-gradient(90deg,#FF6B35,#FFC107);padding:1rem 0;text-align:center;color:white;font-family:'Poppins',sans-serif;font-size:0.92rem;font-weight:600;">
+  Every purchase directly supports an artisan family. No middlemen. Fair wages. Real impact.
+</div>
+
+<div class="container py-5">
+  <!-- Intro -->
+  <div class="row align-items-center g-5 mb-5">
+    <div class="col-lg-6">
+      <div class="section-badge mb-3">Our Mission</div>
+      <h2 class="section-title mb-4">Connecting India's Heritage<br>with the Modern World</h2>
+      <p style="color:var(--text-muted);line-height:1.9;font-size:1rem;">
+        India has over 7 million artisans and craftspeople preserving thousands of years of tradition. Most earn less than ₹5,000 a month despite creating world-class art. We're changing that.
+      </p>
+      <p style="color:var(--text-muted);line-height:1.9;font-size:1rem;margin-top:1rem;">
+        DesiBazaar eliminates middlemen, ensures fair pricing, and provides artisans with a direct digital marketplace to reach customers across India and the world.
+      </p>
+      <div class="d-flex gap-3 mt-4 flex-wrap">
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-check-circle-fill text-success fs-5"></i>
+          <span class="fw-bold">Fair Trade Certified</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-check-circle-fill text-success fs-5"></i>
+          <span class="fw-bold">Direct from Artisans</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-check-circle-fill text-success fs-5"></i>
+          <span class="fw-bold">GI Tag Products</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="row g-3">
+        <div class="col-6">
+          <img src="https://images.unsplash.com/photo-1556909172-54557c7e4fb7?w=300" alt="Artisan at work" style="width:100%;border-radius:20px;height:180px;object-fit:cover;" loading="lazy">
+        </div>
+        <div class="col-6">
+          <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=300" alt="Weaving" style="width:100%;border-radius:20px;height:180px;object-fit:cover;" loading="lazy">
+        </div>
+        <div class="col-12">
+          <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600" alt="Artisan community" style="width:100%;border-radius:20px;height:160px;object-fit:cover;" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="my-5" style="border-color:rgba(255,107,53,0.15);">
+
+  <!-- Artisan Cards -->
+  <div class="text-center mb-5">
+    <div class="section-badge mb-2">Real Stories</div>
+    <h2 class="section-title">Featured Artisans</h2>
+    <p class="text-muted mt-2">Meet a few of the incredible makers behind our products</p>
+  </div>
+
+  <div class="row g-4">
+    {% for artisan in artisans %}
+    <div class="col-md-6 col-lg-4 fade-up">
+      <div class="product-card h-100" style="overflow:hidden;">
+        <!-- Image -->
+        <div style="position:relative;height:220px;overflow:hidden;">
+          <img src="{{ artisan.image }}" alt="{{ artisan.name }}"
+               style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s;"
+               loading="lazy"
+               onmouseover="this.style.transform='scale(1.07)'"
+               onmouseout="this.style.transform='scale(1)'"
+               onerror="this.src='https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400'">
+          <!-- State badge -->
+          <div style="position:absolute;top:12px;left:12px;background:var(--primary);color:white;padding:4px 10px;border-radius:50px;font-size:0.75rem;font-weight:700;">
+            <i class="bi bi-geo-alt-fill me-1"></i>{{ artisan.state }}
+          </div>
+          <!-- Since badge -->
+          <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.6);color:white;padding:4px 10px;border-radius:50px;font-size:0.72rem;font-weight:600;">
+            Since {{ artisan.since }}
+          </div>
+        </div>
+        <div class="product-card-body">
+          <div class="product-category-tag">{{ artisan.craft }}</div>
+          <h5 class="fw-bold mb-2" style="font-family:'Poppins',sans-serif;">{{ artisan.name }}</h5>
+          <p style="font-size:0.88rem;color:var(--text-muted);line-height:1.7;margin-bottom:1rem;">{{ artisan.story }}</p>
+          <div class="d-flex justify-content-between align-items-center mt-auto pt-2" style="border-top:1px solid rgba(255,107,53,0.1);">
+            <div class="d-flex gap-3">
+              <div class="text-center">
+                <div class="fw-bold text-primary" style="font-size:1rem;">{{ artisan.products }}</div>
+                <div class="text-muted" style="font-size:0.72rem;">Products</div>
+              </div>
+              <div class="text-center">
+                <div class="fw-bold" style="color:#FFC107;font-size:1rem;">★ {{ artisan.rating }}</div>
+                <div class="text-muted" style="font-size:0.72rem;">Rating</div>
+              </div>
+            </div>
+            <a href="{% url 'product_list' %}?q={{ artisan.craft }}" class="btn btn-outline-primary btn-sm rounded-pill">
+              View Products →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Become Seller CTA -->
+  <div class="mt-5 p-5 text-center rounded-xl" style="background:linear-gradient(135deg,rgba(255,107,53,0.08),rgba(46,125,50,0.08));border:2px dashed rgba(255,107,53,0.25);">
+    <div style="font-size:3rem;"><i class="bi bi-shop text-primary"></i></div>
+    <h3 class="fw-bold mt-3" style="font-family:'Poppins',sans-serif;">Are You an Artisan or Farmer?</h3>
+    <p class="text-muted mt-2 mb-4" style="max-width:500px;margin:0 auto 1.5rem;">
+      Join DesiBazaar and reach millions of customers who love authentic Indian products. No commission fees for first 6 months!
+    </p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a href="{% url 'contact' %}" class="btn-primary-custom">
+        <i class="bi bi-shop me-2"></i>Apply to Sell
+      </a>
+      <a href="{% url 'about' %}" class="btn-outline-custom">Learn More</a>
+    </div>
+    <div class="d-flex justify-content-center gap-4 mt-4 flex-wrap text-muted small">
+      <span><i class="bi bi-check-circle-fill text-success me-1"></i>Free Registration</span>
+      <span><i class="bi bi-check-circle-fill text-success me-1"></i>Pan-India Reach</span>
+      <span><i class="bi bi-check-circle-fill text-success me-1"></i>Weekly Payments</span>
+      <span><i class="bi bi-check-circle-fill text-success me-1"></i>Marketing Support</span>
+    </div>
+  </div>
+</div>
+{% endblock %}

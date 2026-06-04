@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}My Profile — DesiBazaar{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="p-4 rounded-xl text-center shadow-sm" style="background:var(--card-bg);border:1px solid rgba(255,107,53,0.1);">
+        <div class="profile-avatar">{{ user.first_name|first|upper|default:user.username|first|upper }}</div>
+        <h4 class="fw-bold">{{ user.get_full_name|default:user.username }}</h4>
+        <div class="text-muted small mb-3">{{ user.email }}</div>
+        <div class="text-muted small">Member since {{ user.date_joined|date:"F Y" }}</div>
+        <hr>
+        <div class="row g-3 mt-2">
+          <div class="col-4">
+            <div class="profile-stat">
+              <div class="profile-stat-num">{{ orders|length }}</div>
+              <div class="profile-stat-label">Orders</div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="profile-stat">
+              <div class="profile-stat-num">{{ wishlist_count }}</div>
+              <div class="profile-stat-label">Wishlist</div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="profile-stat">
+              <div class="profile-stat-num">{{ cart_count }}</div>
+              <div class="profile-stat-label">Cart</div>
+            </div>
+          </div>
+        </div>
+        <div class="d-grid gap-2 mt-4">
+          <a href="{% url 'my_orders' %}" class="btn btn-outline-primary btn-sm rounded-pill">My Orders</a>
+          <a href="{% url 'wishlist' %}" class="btn btn-outline-secondary btn-sm rounded-pill">My Wishlist</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="p-4 rounded-xl shadow-sm" style="background:var(--card-bg);border:1px solid rgba(255,107,53,0.1);">
+        <h5 class="fw-bold mb-4">Edit Profile</h5>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">First Name</label>
+              {{ form.first_name }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Last Name</label>
+              {{ form.last_name }}
+            </div>
+            <div class="col-12">
+              <label class="form-label">Email</label>
+              {{ form.email }}
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary mt-4 rounded-pill px-4">Save Changes</button>
+        </form>
+      </div>
+
+      {% if orders %}
+      <div class="p-4 rounded-xl shadow-sm mt-4" style="background:var(--card-bg);border:1px solid rgba(255,107,53,0.1);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0">Recent Orders</h5>
+          <a href="{% url 'my_orders' %}" class="small text-primary">View All</a>
+        </div>
+        {% for order in orders %}
+        <a href="{% url 'order_detail' order.order_number %}" class="text-decoration-none">
+          <div class="d-flex justify-content-between align-items-center p-2 rounded-xl mb-2 {% if not forloop.last %}border-bottom{% endif %}" style="transition:all 0.2s;">
+            <div>
+              <div class="fw-bold" style="font-size:0.9rem;">#{{ order.order_number }}</div>
+              <div class="text-muted small">{{ order.created_at|date:"d M Y" }} · {{ order.items.count }} item{{ order.items.count|pluralize }}</div>
+            </div>
+            <div class="text-end">
+              <div class="fw-bold text-primary">₹{{ order.total_amount }}</div>
+              <span class="status-badge status-{{ order.status }}" style="font-size:0.7rem;">{{ order.get_status_display }}</span>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

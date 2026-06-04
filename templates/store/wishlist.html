@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}My Wishlist — DesiBazaar{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h2 class="fw-bold mb-4"><i class="bi bi-heart me-2 text-danger"></i>My Wishlist ({{ products|length }} items)</h2>
+  {% if products %}
+  <div class="row g-4">
+    {% for product in products %}
+    <div class="col-6 col-md-4 col-lg-3 fade-up">
+      {% include 'store/includes/product_card.html' with product=product %}
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon"><i class="bi bi-heart text-muted" style="font-size:4rem;"></i></div>
+    <div class="empty-state-title">Your wishlist is empty</div>
+    <div class="empty-state-desc">Save products you love by clicking the heart icon on any product.</div>
+    <a href="{% url 'product_list' %}" class="btn-primary-custom">Explore Products</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Search Results — DesiBazaar{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="mb-4">
+    <h2 class="fw-bold" style="font-family:'Poppins',sans-serif;">
+      Search Results for "<span class="text-primary">{{ query }}</span>"
+    </h2>
+    <p class="text-muted">{{ products.paginator.count }} product{{ products.paginator.count|pluralize }} found</p>
+  </div>
+
+  <!-- Search again -->
+  <form class="mb-5" method="GET">
+    <div class="input-group" style="max-width:540px;">
+      <input type="text" name="q" class="form-control" value="{{ query }}" placeholder="Search products...">
+      <button class="btn btn-primary" type="submit"><i class="bi bi-search me-1"></i>Search</button>
+    </div>
+  </form>
+
+  {% if products %}
+  <div class="row g-4">
+    {% for product in products %}
+    <div class="col-6 col-md-4 col-lg-3 fade-up">
+      {% include 'store/includes/product_card.html' with product=product %}
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if products.has_other_pages %}
+  <nav class="mt-5 d-flex justify-content-center">
+    <ul class="pagination">
+      {% if products.has_previous %}
+      <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ products.previous_page_number }}"><i class="bi bi-chevron-left"></i></a></li>
+      {% endif %}
+      {% for num in products.paginator.page_range %}
+      <li class="page-item {% if products.number == num %}active{% endif %}">
+        <a class="page-link" href="?q={{ query }}&page={{ num }}">{{ num }}</a>
+      </li>
+      {% endfor %}
+      {% if products.has_next %}
+      <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ products.next_page_number }}"><i class="bi bi-chevron-right"></i></a></li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon"><i class="bi bi-search text-muted" style="font-size:4rem;"></i></div>
+    <div class="empty-state-title">No results for "{{ query }}"</div>
+    <div class="empty-state-desc">Try different keywords or browse our categories.</div>
+    <a href="{% url 'product_list' %}" class="btn-primary-custom">Browse All Products</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

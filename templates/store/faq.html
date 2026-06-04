@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}FAQ — DesiBazaar{% endblock %}
+{% block content %}
+<div style="background:linear-gradient(135deg,#FF6B35,#FFC107);padding:3rem 0;">
+  <div class="container text-white text-center">
+    <h1 style="font-size:2.5rem;font-weight:800;">Frequently Asked Questions</h1>
+    <p style="opacity:0.9;">Everything you need to know about shopping at DesiBazaar</p>
+  </div>
+</div>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="accordion" id="faqAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">Are all products on DesiBazaar authentic?</button></h2>
+          <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">Yes! Every product on DesiBazaar is verified for authenticity. We work directly with artisans, farmers, and verified regional producers. Products claiming GI (Geographical Indication) tags are always verified before listing.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">What are your shipping charges?</button></h2>
+          <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">Shipping is <strong>FREE</strong> on all orders above ₹499. For orders below ₹499, a flat shipping charge of ₹49 applies. We deliver across all of India within 5-7 business days.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">What payment methods do you accept?</button></h2>
+          <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">We accept UPI (GPay, PhonePe, Paytm), all major Credit & Debit Cards (Visa, Mastercard, RuPay), Net Banking, and Cash on Delivery (COD).</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">What is your return policy?</button></h2>
+          <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">We offer a 7-day easy return policy on most products. If you're unsatisfied for any reason, contact us within 7 days of delivery. Food products can only be returned if damaged or defective.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">How do I track my order?</button></h2>
+          <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">Once your order is shipped, you'll receive a tracking number via email/SMS. You can also track your order from "My Orders" section in your account dashboard.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">Can I sell my products on DesiBazaar?</button></h2>
+          <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">Yes! We welcome artisans, farmers, and local producers. Contact us at <a href="mailto:sellers@desibazaar.in" class="text-primary">sellers@desibazaar.in</a> with details about your products. Our team will verify your credentials and onboard you.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-5 p-4 rounded-xl" style="background:rgba(255,107,53,0.05);border:1px solid rgba(255,107,53,0.15);">
+        <h5 class="fw-bold">Still have questions?</h5>
+        <p class="text-muted mb-3">Our support team is here to help</p>
+        <a href="{% url 'contact' %}" class="btn-primary-custom">Contact Support</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
